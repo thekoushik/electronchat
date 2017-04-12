@@ -23,28 +23,24 @@ var scanNetwork=function(){
                 if(str_ip==addr) continue;
                 tasks.push((function(strip){
                     return function(cb){
-                        /*exec("ping "+strip+" -n 1 -w 2", (error, stdout, stderr) => {
-                            if(stdout.indexOf("Reply from")>0){
-                                availables.push(strip);
-                            }
-                            cb();
-                        });*/
-                        request({url:'http://'+strip+':9000/ping_chat',timeout:TIMEOUT},(err,resp,body)=>{
-                            if(!err){
+                        request({
+                            url:'http://'+strip+':9000/__ping_chat_',
+                            timeout:TIMEOUT
+                        },(err,resp,body)=>{
+                            if(!err)
                                 if(body.trim()==='pong_chat 1')
                                     availables.push(strip);
-                            }
                             cb();
                         });
                     };
                 })(str_ip));
             }
             async.parallel(tasks,function(err, results){
-                console.log("End",availables);
+                //console.log("End",availables);
                 resolve(availables);
             });
         }else{
-            console.log("Nop");
+            //console.log("Nop");
             reject(new Error("No Network"));
         }
     });
