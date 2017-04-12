@@ -50,7 +50,7 @@ const template = [
             label:"Join",
             click(menuItem, browserWindow, event){
                 console.log('Joining..');
-                browserWindow.loadURL('http://localhost:9000/join');
+                browserWindow.loadURL('http://localhost:9000/___join___');
             }
         },
       {

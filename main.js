@@ -3,7 +3,6 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
-
 const path = require('path')
 const url = require('url')
 const server = require('./server');
@@ -13,11 +12,25 @@ const server = require('./server');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-var available_ips=[];
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  }
+})
+
+if (shouldQuit) {
+  app.quit()
+}
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: path.join(__dirname, 'static/images/64x64.png')
+  })
 
   // and load the index.html of the app.
   /*mainWindow.loadURL(url.format({
@@ -25,9 +38,10 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))*/
-  mainWindow.loadURL("http://localhost:9000");
+  mainWindow.loadURL("http://localhost:9000/__index__");
   mainWindow.myserver=server;
-  require('./menu/mainmenu');
+  mainWindow.setMenu(null);
+  //require('./menu/mainmenu');
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
