@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager ./ server --platform=win32 --arch=x64"
+    "build": "electron-packager ./ ElectronChat --overwrite --icon=static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
   },
-  "repository": "https://github.com/",
+  "repository": "https://github.com/thekoushik/electronchat",
   "devDependencies": {
     "electron": "~1.6.2"
   },
