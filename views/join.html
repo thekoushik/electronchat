@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Electron Chat</title>
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="/static/css/photon.css">
   </head>
 
@@ -11,7 +10,33 @@
     <div class="window">
       <!-- .toolbar-header sits at the top of your app -->
       <header class="toolbar toolbar-header">
-        <h1 class="title">Chat App</h1>
+        <div class="toolbar-actions">
+          <!--<div class="btn-group">
+            <button class="btn btn-default">
+              <span class="icon icon-home"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-folder"></span>
+            </button>
+            <button class="btn btn-default active">
+              <span class="icon icon-cloud"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-popup"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-shuffle"></span>
+            </button>
+          </div>-->
+          <button class="btn btn-default" id="host">
+            <span class="icon icon-signal icon-text"></span>
+            Host
+          </button>
+          <button class="btn btn-default" id="scan">
+            <span class="icon icon-flashlight icon-text"></span>
+            Scan
+          </button>
+        </div>
       </header>
       <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
@@ -25,6 +50,10 @@
           </div>
         </div>
       </div>
+
+      <footer class="toolbar toolbar-footer">
+        <h1 class="title">Footer</h1>
+      </footer>
     </div>
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -33,9 +62,9 @@
     <!-- Insert this line after script imports -->
     <script>if (window.module) module = window.module;</script>
     <script>
-      $(function(){
+      /*$(function(){
         $("#hosts").html('<h5 class="nav-group-title">Scanning..</h5>');
-        $.getJSON('http://localhost:9000/gethosts',function(json){
+        $.getJSON('http://localhost:9000/_gethosts__',function(json){
             var id=document.getElementById("hosts");
             if(json.length==0){
               $("#hosts").html('<h5 class="nav-group-title">Nothing</h5>');
@@ -46,6 +75,39 @@
               }
             }
         });
+      });*/
+
+    </script>
+    <script>
+      var ipc=require('electron').ipcRenderer;
+      document.getElementById('host').addEventListener('click',
+      function(e){
+        e.preventDefault();
+        ipc.send('host','1');
+      });
+      var scanwait=false;
+      function scan(){
+        scanwait=true;
+        ipc.send('gethosts','1');
+        $("#hosts").html('<h5 class="nav-group-title">Scanning..</h5>');
+      }
+      ipc.on('hosts',function(e,arr){
+        scanwait=false;
+        if(arr.length==0){
+          $("#hosts").html('<h5 class="nav-group-title">Nothing</h5>');
+        }else{
+          $("#hosts").html('<h5 class="nav-group-title">Available</h5>');
+          for(var i=0;i<arr.length;i++){
+            $("#hosts").append('<span class="nav-group-item"><span class="icon icon-signal"></span>'+arr[i]+'</span>');
+          }
+        }
+      });
+      scan();
+      document.getElementById('scan').addEventListener('click',
+      function(e){
+        e.preventDefault();
+        if(!scanwait)
+          scan();
       });
     </script>
   </body>

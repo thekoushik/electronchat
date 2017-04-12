@@ -1,6 +1,7 @@
 var Chat=require('./Chat');
 var fs = require('fs');
 var scan=require('./iptest');
+var ipc=require('electron').ipcMain;
 
 function sendFile(req,res, filename){
     fs.readFile(__dirname + '/views/'+filename+'.html',
@@ -14,27 +15,25 @@ function sendFile(req,res, filename){
             });
 }
 var router={
-    "GET /":function(req,res){
+    "GET /__index__":function(req,res){
         sendFile(req,res,'index');
     },
-    "GET /join":function(req,res){
+    "GET /___join___":function(req,res){
         sendFile(req,res,'join');
     },
-    "GET /ping_chat":function(req,res){
+    "GET /__ping_chat_":function(req,res){
         res.writeHead(200);
         res.end("pong_chat "+Chat.host);
-    },
-    "GET /gethosts":function(req,res){
-        scan().then(function(arr){
-            console.log(arr);
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(arr));
-        }).catch(function(e){
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(e));
-        });
     }
 };
+ipc.on('host',(e,msg)=>{
+    Chat.host=1;
+});
+ipc.on('gethosts',(e,d)=>{
+    scan().then((arr)=>{
+        e.sender.send('hosts', arr);
+    }).catch(()=>{});
+})
 function staticFile(filename,res){
     fs.readFile(__dirname + filename,
         function (err, data) {

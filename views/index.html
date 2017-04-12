@@ -5,13 +5,38 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/static/css/photon.css">
   </head>
-
   <body>
     <!-- Wrap your entire app inside .window -->
     <div class="window">
       <!-- .toolbar-header sits at the top of your app -->
       <header class="toolbar toolbar-header">
-        <h1 class="title">Chat App</h1>
+        <div class="toolbar-actions">
+          <!--<div class="btn-group">
+            <button class="btn btn-default">
+              <span class="icon icon-home"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-folder"></span>
+            </button>
+            <button class="btn btn-default active">
+              <span class="icon icon-cloud"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-popup"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-shuffle"></span>
+            </button>
+          </div>-->
+          <button class="btn btn-default" id="host">
+            <span class="icon icon-signal icon-text"></span>
+            Host
+          </button>
+          <button class="btn btn-default" onclick="location='/___join___'">
+            <span class="icon icon-flash icon-text"></span>
+            Join
+          </button>
+        </div>
       </header>
 
       <!-- Your app's content goes inside .window-content -->
@@ -25,10 +50,22 @@
           </p>
         </div>
       </div>
+
+      <footer class="toolbar toolbar-footer">
+        <h1 class="title">Footer</h1>
+      </footer>
     </div>
   </body>
   <script>
     // You can also require other files to run in this process
     require('./renderer.js')
   </script>
+  <script>
+      var ipc=require('electron').ipcRenderer;
+      document.getElementById('host').addEventListener('click',
+      function(e){
+        e.preventDefault();
+        ipc.send('host','1');
+      });
+    </script>
 </html>
