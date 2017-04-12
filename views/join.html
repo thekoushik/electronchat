@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Electron Chat</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/photon.css">
+  </head>
+
+  <body>
+    <!-- Wrap your entire app inside .window -->
+    <div class="window">
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header">
+        <h1 class="title">Chat App</h1>
+      </header>
+      <!-- Your app's content goes inside .window-content -->
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane pane-sm sidebar">
+            <nav class="nav-group" id="hosts">
+            </nav>
+          </div>
+          <div class="pane padded-more">
+            <h3>Chat Content </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <!-- normal script imports etc  -->
+    <script src="/static/components/jquery/dist/jquery.min.js"></script>
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+    <script>
+      $(function(){
+        $("#hosts").html('<h5 class="nav-group-title">Scanning..</h5>');
+        $.getJSON('http://localhost:9000/gethosts',function(json){
+            var id=document.getElementById("hosts");
+            if(json.length==0){
+              $("#hosts").html('<h5 class="nav-group-title">Nothing</h5>');
+            }else{
+              $("#hosts").html('<h5 class="nav-group-title">Available</h5>');
+              for(var i =0;i<json.length;i++){
+                $("#hosts").append('<span class="nav-group-item"><span class="icon icon-signal"></span>'+json[i]+'</span>');
+              }
+            }
+        });
+      });
+    </script>
+  </body>
+</html>

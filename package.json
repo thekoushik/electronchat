@@ -1,0 +1,19 @@
+{
+  "name": "electronchat",
+  "version": "1.0.0",
+  "description": "Electron Chat Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager ./ server --platform=win32 --arch=x64"
+  },
+  "repository": "https://github.com/",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  },
+  "dependencies": {
+    "async": "^2.3.0",
+    "request": "^2.81.0",
+    "socket.io": "^1.7.3"
+  }
+}
