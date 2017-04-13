@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager ./ ElectronChat --overwrite --icon=static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
+    "build": "electron-packager ./ ElectronChat --overwrite --icon=src/static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
   },
   "repository": "https://github.com/thekoushik/electronchat",
   "devDependencies": {
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "async": "^2.3.0",
+    "nedb": "^1.8.0",
     "request": "^2.81.0",
     "socket.io": "^1.7.3"
   }

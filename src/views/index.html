@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Electron Chat</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/photon.css">
+  </head>
+  <body>
+    <!-- Wrap your entire app inside .window -->
+    <div class="window">
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header">
+        <div class="toolbar-actions">
+          <!--<div class="btn-group">
+            <button class="btn btn-default">
+              <span class="icon icon-home"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-folder"></span>
+            </button>
+            <button class="btn btn-default active">
+              <span class="icon icon-cloud"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-popup"></span>
+            </button>
+            <button class="btn btn-default">
+              <span class="icon icon-shuffle"></span>
+            </button>
+          </div>-->
+          <button class="btn btn-default" onclick="location='/___host___'">
+            <span class="icon icon-signal icon-text"></span>
+            Host
+          </button>
+          <button class="btn btn-default" onclick="location='/___join___'">
+            <span class="icon icon-flash icon-text"></span>
+            Join
+          </button>
+          <button class="btn btn-default pull-right" onclick="location='/___user___'">
+            <span class="icon icon-user"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Your app's content goes inside .window-content -->
+      <div class="window-content">
+        <div class="padded-more">
+          <p>
+            <!-- All of the Node.js APIs are available in this renderer process. -->
+            We are using Node.js <script>document.write(process.versions.node)</script>,
+            Chromium <script>document.write(process.versions.chrome)</script>,
+            and Electron <script>document.write(process.versions.electron)</script>.
+          </p>
+          <div class="">
+            <img id="userphoto" class="img-circle media-object pull-left" src="/static/images/user.png" width="32" height="32">
+            <div class="media-body">
+              <strong>Current User</strong>
+              <p id="username"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="toolbar toolbar-footer">
+        <h1 class="title">Footer</h1>
+      </footer>
+    </div>
+  </body>
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+  <script>
+      var ipc=require('electron').ipcRenderer;
+      ipc.send('fetchuser','1');
+      ipc.on('user',function(e,d){
+        document.getElementById("username").innerText=d.username;
+        if(d.photo!=""){
+          document.getElementById("userphoto").src='file://'+d.photo;
+        }
+      });
+    </script>
+</html>

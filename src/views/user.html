@@ -28,7 +28,7 @@
               <span class="icon icon-shuffle"></span>
             </button>
           </div>-->
-          <button class="btn btn-default" id="host">
+          <button class="btn btn-default" onclick="location='/___host___'">
             <span class="icon icon-signal icon-text"></span>
             Host
           </button>
@@ -36,21 +36,27 @@
             <span class="icon icon-flash icon-text"></span>
             Join
           </button>
+          <button class="btn btn-default pull-right" onclick="location='/__index__'">
+            <span class="icon icon-home icon-text"></span> Home
+          </button>
         </div>
       </header>
 
       <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
         <div class="padded-more">
-          <p>
-            <!-- All of the Node.js APIs are available in this renderer process. -->
-            We are using Node.js <script>document.write(process.versions.node)</script>,
-            Chromium <script>document.write(process.versions.chrome)</script>,
-            and Electron <script>document.write(process.versions.electron)</script>.
-          </p>
+          <form>
+            <div class="form-group" hidden>
+                <label>Name</label>
+                <input type="text" class="form-control" placeholder="Name">
+            </div>
+            <div class="form-actions">
+                <button type="button" id="photofile" class="btn btn-form btn-primary">Change Photo</button>
+                <button type="button" hidden id="save" class="btn btn-form btn-positive">Save</button>
+            </div>
+          </form>
         </div>
       </div>
-
       <footer class="toolbar toolbar-footer">
         <h1 class="title">Footer</h1>
       </footer>
@@ -62,10 +68,11 @@
   </script>
   <script>
       var ipc=require('electron').ipcRenderer;
-      document.getElementById('host').addEventListener('click',
+      document.getElementById('photofile').addEventListener('click',
       function(e){
         e.preventDefault();
-        ipc.send('host','1');
+        ipc.send('userphoto','1');
       });
+      
     </script>
 </html>

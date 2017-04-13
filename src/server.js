@@ -2,8 +2,11 @@ var Chat=require('./Chat');
 var fs = require('fs');
 var scan=require('./iptest');
 var ipc=require('electron').ipcMain;
-
-function sendFile(req,res, filename){
+const {dialog} = require('electron');
+const config=require('./config');
+var db=require('./db');
+var browser=null;
+function sendView(req,res, filename){
     fs.readFile(__dirname + '/views/'+filename+'.html',
             function (err, data) {
                 if (err) {
@@ -16,10 +19,16 @@ function sendFile(req,res, filename){
 }
 var router={
     "GET /__index__":function(req,res){
-        sendFile(req,res,'index');
+        sendView(req,res,'index');
     },
     "GET /___join___":function(req,res){
-        sendFile(req,res,'join');
+        sendView(req,res,'join');
+    },
+    "GET /___host___":function(req,res){
+        sendView(req,res,'host');
+    },
+    "GET /___user___":function(req,res){
+        sendView(req,res,'user');
     },
     "GET /__ping_chat_":function(req,res){
         res.writeHead(200);
@@ -33,7 +42,35 @@ ipc.on('gethosts',(e,d)=>{
     scan().then((arr)=>{
         e.sender.send('hosts', arr);
     }).catch(()=>{});
+});
+ipc.on('fetchuser',(e,d)=>{
+    db.find({username:config.computerName},(er,d)=>{
+        if(d.length>0){
+            e.sender.send('user',d[0]);
+        }
+    });
 })
+ipc.on('userphoto',(e,d)=>{
+    if(Chat.browser==null) return;
+    dialog.showOpenDialog(Chat.browser,{
+        filters: [{ name: 'Images', extensions: ['png','jpg','bmp'] }],
+        properties: ['openFile']
+    },function(paths){
+        if(paths){
+            //Chat.browser.minimize();
+            var file=config.newStoreFile(config.getFileNameFromFullPath(paths[0]));
+            db.find({username:config.computerName},(e,d)=>{
+                if(d.length>0){
+                    if(d[0].photo!="")
+                        fs.unlinkSync(d[0].photo);
+                    fs.createReadStream(paths[0]).pipe(fs.createWriteStream(file));
+                    d[0].photo=file;
+                    db.update(d[0]._id,d[0]);
+                }
+            });
+        }
+    });
+});
 function staticFile(filename,res){
     fs.readFile(__dirname + filename,
         function (err, data) {
@@ -67,4 +104,7 @@ io.on('connection', function (socket) {
   });
 });
 
-module.exports=app;
+module.exports={
+    server:app,
+    browser:browser
+};

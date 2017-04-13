@@ -5,8 +5,8 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
-const server = require('./server');
-//const myserver=require('./myserver');
+const server = require('./src/server');
+var chat=require('./src/Chat');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -29,7 +29,10 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, 'static/images/64x64.png')
+    icon: path.join(__dirname, '/src/static/images/64x64.png'),
+    webPreferences:{
+      webSecurity:false
+    }
   })
 
   // and load the index.html of the app.
@@ -39,9 +42,10 @@ function createWindow () {
     slashes: true
   }))*/
   mainWindow.loadURL("http://localhost:9000/__index__");
-  mainWindow.myserver=server;
+  //mainWindow.myserver=server;
+  chat.browser=mainWindow;
   mainWindow.setMenu(null);
-  //require('./menu/mainmenu');
+  //require('./src/menu/mainmenu');
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

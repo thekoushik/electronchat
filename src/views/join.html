@@ -28,13 +28,16 @@
               <span class="icon icon-shuffle"></span>
             </button>
           </div>-->
-          <button class="btn btn-default" id="host">
+          <button class="btn btn-default" onclick="location='/___host___'">
             <span class="icon icon-signal icon-text"></span>
             Host
           </button>
           <button class="btn btn-default" id="scan">
             <span class="icon icon-flashlight icon-text"></span>
             Scan
+          </button>
+          <button class="btn btn-default pull-right" onclick="location='/___user___'">
+            <span class="icon icon-user"></span>
           </button>
         </div>
       </header>
@@ -80,11 +83,6 @@
     </script>
     <script>
       var ipc=require('electron').ipcRenderer;
-      document.getElementById('host').addEventListener('click',
-      function(e){
-        e.preventDefault();
-        ipc.send('host','1');
-      });
       var scanwait=false;
       function scan(){
         scanwait=true;
