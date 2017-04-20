@@ -2,18 +2,32 @@
   "name": "electronchat",
   "version": "1.0.0",
   "description": "Electron Chat Application",
-  "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-packager ./ ElectronChat --overwrite --icon=src/static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
+    "start": "nf start -p 3000",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-start": "node src/electron-wait-react",
+    "react-start": "react-scripts start",
+    "exe": "electron-packager ./ ElectronChat --overwrite --icon=src/static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
   },
+  "homepage": "./",
+  "main": "src/electron-starter.js",
   "repository": "https://github.com/thekoushik/electronchat",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~1.6.2",
+    "foreman": "*",
+    "react-scripts": "*"
   },
   "dependencies": {
     "async": "^2.3.0",
+    "moment": "^2.18.1",
     "nedb": "^1.8.0",
+    "querystring": "^0.2.0",
+    "react": "*",
+    "react-dom": "*",
+    "react-router-dom": "^4.1.1",
     "request": "^2.81.0",
     "socket.io": "^1.7.3"
   }

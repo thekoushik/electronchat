@@ -1,0 +1,55 @@
+.list-group-item{
+    padding: 5px;
+}
+.chat_input{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.chat_text{
+    color: #283593;
+}
+.chat_lines{
+    width:85%;
+}
+.chat_lines p{
+    opacity: 0.7;
+}
+.my_text{
+    float: left;
+}
+.his_text{
+    float: right;
+    text-align: right;
+}
+.list-group2 *{
+    overflow-x: visible;
+    overflow-y: hidden;
+    text-overflow: unset;
+    white-space: unset;
+    word-wrap: break-word;
+}
+.chat_list_container{
+    position: fixed;
+    top: 68px;
+    bottom: 35px;
+    width: 100%;
+    right: 0;
+    padding-left: 220px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.chat-header{
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+}
+.chat-widget-holder{
+    overflow: hidden;
+    height: 100%;
+    max-height: 100%;
+}
+.chat_list{
+    /*position: absolute;
+    bottom: 40px;*/
+}
