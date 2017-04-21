@@ -6,6 +6,7 @@ var os=require('os');
 function Config(){
     var self=this;
     this.innerPORT=9000;
+    this.myIP="";
     this.storagePath=app.getPath('userData');
     this.databaseFileName="Database.db";
     this.databaseFilePath=path.join(this.storagePath,this.databaseFileName);

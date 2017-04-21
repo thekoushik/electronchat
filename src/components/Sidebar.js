@@ -19,8 +19,8 @@ export default class Sidebar extends Component{
         this.props.navigate(route);
     }
     ipClick(index){
-      console.log(index,this.state.availables[index]);
-      ipcRenderer.sendSync('select-ip',[this.state.availables[index]]);
+      //console.log(index,this.state.availables[index]);
+      ipcRenderer.sendSync('select-ip',this.state.availables[index]);
       this.navigate('/manage');
     }
     renderIps(){
