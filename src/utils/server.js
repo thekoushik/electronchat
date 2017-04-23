@@ -5,10 +5,14 @@ var scan = require('./iptest');
 const request = require('request');
 const querystring = require('querystring');
 var ipc = require('electron').ipcMain;
-const { dialog } = require('electron');
 var db = require('./db');
 var browser = null;
 var router = {
+    "GET /baloon":function(req,res){
+        Chat.showBaloon('New Message Arrived',"Hello Koushik, How are you?",()=>{Chat.msgbox("Koushik's message","Hello World","htfhtfhtfhtfhtf yjgjyg yfgjyg")});
+        res.writeHead(200);
+        res.end("sent");
+    },
     "POST /__chat_": function(req, res) {
         var queryData = "";
         req.on('data', function(data) {
@@ -20,14 +24,16 @@ var router = {
             }*/
         });
         req.on('end', function() {
-            Chat.browser.webContents.send('chat-get', querystring.parse(queryData));
+            Chat.sendToBrowserIPC('chat-get', querystring.parse(queryData));
+            //Chat.browser.webContents.send('chat-get', querystring.parse(queryData));
             res.writeHead(200);
             res.end("sent");
         });
     },
     "GET /__ping_chat_": function(req, res) {
         var ip = req.connection.remoteAddress.split(":").pop();
-        Chat.browser.webContents.send('incoming_ping', ip);
+        Chat.sendToBrowserIPC('incoming_ping', ip);
+        //Chat.browser.webContents.send('incoming_ping', ip);
         res.writeHead(200); //,{'Content-Type': 'application/json'});
         res.end("pong_chat," + Chat.host + "," + config.computerName);
     }
@@ -84,13 +90,12 @@ ipc.on('fetchuser', (e, d) => {
     });
 })
 ipc.on('userphoto', (e, d) => {
-    if (Chat.browser == null) return;
-    dialog.showOpenDialog(Chat.browser, {
+    Chat.openDialog({
         filters: [{ name: 'Images', extensions: ['png', 'jpg', 'bmp'] }],
         properties: ['openFile']
     }, function(paths) {
         if (paths) {
-            //Chat.browser.minimize();
+            //Chat.minimizeWindow();
             var file = config.newStoreFile(config.getFileNameFromFullPath(paths[0]));
             db.find({ username: config.computerName }, (e, d) => {
                 if (d.length > 0) {

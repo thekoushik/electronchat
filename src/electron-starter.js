@@ -1,8 +1,10 @@
-const electron = require('electron');
+const {app, BrowserWindow, Menu, Tray,dialog } = require('electron');
+/*const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+*/
 
 const path = require('path');
 const url = require('url');
@@ -12,6 +14,10 @@ const server = require('./utils/server');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let tray = null;
+const iconPath=process.env.ELECTRON_START_URL ?
+        path.join(__dirname, '/../public/') :
+        path.join(__dirname, '/../build/');
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   // Someone tried to run a second instance, we should focus our window.
@@ -35,9 +41,8 @@ function createWindow() {
             slashes: true
         });
     mainWindow.loadURL(startUrl);
-    chat.browser=mainWindow;
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if(process.env.ELECTRON_START_URL) mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -46,6 +51,27 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+
+    tray = new Tray(iconPath+'favicon.ico');
+    const contextMenu = Menu.buildFromTemplate([
+        {label: 'Game Mode', type: 'radio'},
+        {label: 'Normal Mode', type: 'radio', checked: true},
+        {label: 'About', click:()=>{
+            dialog.showMessageBox(mainWindow,{
+                type:"info",
+                title:"Electron Chat App",
+                message:"Electron Chat App",
+                detail: "author: thekoushik"
+            });
+        }}
+    ])
+    tray.setToolTip('This is my application.')
+    tray.setContextMenu(contextMenu)
+    /*tray.on('click', () => {
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    });*/
+
+    chat.init(mainWindow,tray,dialog);
 }
 
 // This method will be called when Electron has finished

@@ -10,7 +10,7 @@
     "electron": "electron .",
     "electron-start": "node src/electron-wait-react",
     "react-start": "react-scripts start",
-    "exe": "electron-packager ./ ElectronChat --overwrite --icon=src/static/images/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
+    "exe": "electron-packager ./ ElectronChat --overwrite --icon=public/favicon.ico --platform=win32 --arch=x64 --out=builds --version-string.CompanyName=thekoushik --version-string.FileDescription=thekoushik --version-string.ProductName=\"Electron Chat App\""
   },
   "homepage": "./",
   "main": "src/electron-starter.js",
