@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import './Manage.css';
+import {emojify} from 'react-emojione';
 
-const electron = window.require('electron');
-const ipcRenderer = electron.ipcRenderer;
+const ipcRenderer = window.require('electron').ipcRenderer;
+const options = {
+    convertShortnames: true,
+    //convertUnicode: true,
+    //convertAscii: true,
+    style: {
+        backgroundImage: '',// 'url("images/emojione.sprites.png")',
+        height: 24,
+        margin: 4,
+    },
+    output:''
+};
 
 class Manage extends Component {
     constructor(props, context) {
@@ -35,7 +46,7 @@ class Manage extends Component {
         ipcRenderer.on('same-link-revisit',(e,msg)=>{
             var sel = ipcRenderer.sendSync('current-selected-ip');
             this.setState({ currentReceivers: sel });
-            console.log('load/reload data for '+sel);
+            console.log('load/reload data for ',sel);
         });
     }
     componentWillUnmount() { //before destroy
@@ -48,7 +59,7 @@ class Manage extends Component {
     }
     addChat(c, me) {
         this.state.chats[this.state.chats.length - 1] = c;
-        if (me)
+        if(me)
             this.setState({ chat_txt: "", chats: this.state.chats.concat({ text: "" }) });
         else
             this.setState({ chats: this.state.chats.concat({ text: "" }) });
@@ -59,7 +70,7 @@ class Manage extends Component {
         if (e.charCode === 13 && txt.trim().length > 0 && this.state.currentReceivers.length>0) {
             var newchat = {
                 sender: this.state.user_info.name,
-                sender_ip:this.state.user_info.ip,
+                sender_ip: this.state.user_info.ip,
                 receivers: this.state.currentReceivers,
                 text: txt,
                 sent: false,
@@ -77,8 +88,8 @@ class Manage extends Component {
                 return (
                     <li key={index} className="list-group-item" >
                         <div>
-                        <strong> &nbsp; </strong>
-                        <p> Last online at { new Date().toLocaleString() } </p>
+                            <strong> &nbsp; </strong>
+                            <p> Last online at { new Date().toLocaleString() } </p>
                         </div>
                     </li>
                 );
@@ -86,7 +97,7 @@ class Manage extends Component {
                 return (
                     <li key = { index } className = "list-group-item" >
                         <div className = { "chat_lines " + (txt.sender_ip === self.state.user_info.ip ? "my_text" : "his_text") } >
-                            <strong className = "chat_text" > { txt.text } </strong>
+                            <strong className = "chat_text" > { emojify(txt.text,options) } </strong>
                             <p> { txt.time } </p>
                         </div>
                     </li>

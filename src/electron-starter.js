@@ -15,9 +15,7 @@ const server = require('./utils/server');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let tray = null;
-const iconPath=process.env.ELECTRON_START_URL ?
-        path.join(__dirname, '/../public/') :
-        path.join(__dirname, '/../build/');
+const iconPath=process.env.ELECTRON_START_URL ? path.join(__dirname, '/../public/') : path.join(__dirname, '/../build/');
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   // Someone tried to run a second instance, we should focus our window.

@@ -56,7 +56,7 @@ ipc.on('same-link-revisit',(e,msg)=>{
 });
 ipc.on('get-info', (e, msg) => {
     e.returnValue = { name: config.computerName,ip:config.myIP };
-})
+});
 ipc.on('send-chat', (e, msg) => {
     request.post({
         url: 'http://' + msg.receivers[0].ip + ':' + config.innerPORT + '/__chat_',
