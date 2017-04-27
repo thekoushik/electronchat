@@ -11,8 +11,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 const PropTypes = require('prop-types');
 
-/*const electron = window.require('electron');
-const ipcRenderer = electron.ipcRenderer;*/
+const ipcRenderer = window.require('electron').ipcRenderer;
 
 class App extends Component {
     constructor(props,context) {
@@ -23,7 +22,10 @@ class App extends Component {
     }
     goto(d){
         console.log(d);
-        this.context.router.history.replace(d);
+        if(this.context.router.history.location.pathname==d)
+            ipcRenderer.send('same-link-revisit',d);
+        else
+            this.context.router.history.replace(d);
     }
     render() {
         return (

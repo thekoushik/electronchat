@@ -64,8 +64,11 @@ export default class Sidebar extends Component{
               </span>
     */
     render(){
+        const style={
+          "zIndex":1
+        };
         return(
-        <div className="pane pane-sm sidebar">
+          <div className="pane pane-sm sidebar" style={style}>
             <nav className="nav-group">
               <h5 className="nav-group-title">Friends</h5>
               {this.renderIps()}

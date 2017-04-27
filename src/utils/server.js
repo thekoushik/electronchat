@@ -51,6 +51,9 @@ ipc.on('select-ip', (e, msg) => {
     Chat.currentSelections = [msg];
     e.returnValue = 1;
 });
+ipc.on('same-link-revisit',(e,msg)=>{
+    Chat.sendToBrowserIPC('same-link-revisit',msg);
+});
 ipc.on('get-info', (e, msg) => {
     e.returnValue = { name: config.computerName,ip:config.myIP };
 })

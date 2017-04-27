@@ -31,7 +31,12 @@ class Manage extends Component {
         });
         ipcRenderer.on('chat-send-result', (e, arg) => {
             console.log('chat-result', arg);
-        })
+        });
+        ipcRenderer.on('same-link-revisit',(e,msg)=>{
+            var sel = ipcRenderer.sendSync('current-selected-ip');
+            this.setState({ currentReceivers: sel });
+            console.log('load/reload data for '+sel);
+        });
     }
     componentWillUnmount() { //before destroy
     }
@@ -51,7 +56,7 @@ class Manage extends Component {
     }
     send_chat_text(e) {
         var txt = this.state.chat_txt;
-        if (e.charCode === 13 && txt.trim().length > 0) {
+        if (e.charCode === 13 && txt.trim().length > 0 && this.state.currentReceivers.length>0) {
             var newchat = {
                 sender: this.state.user_info.name,
                 sender_ip:this.state.user_info.ip,
