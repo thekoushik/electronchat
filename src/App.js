@@ -22,7 +22,7 @@ class App extends Component {
     }
     goto(d){
         console.log(d);
-        if(this.context.router.history.location.pathname==d)
+        if(this.context.router.history.location.pathname===d)
             ipcRenderer.send('same-link-revisit',d);
         else
             this.context.router.history.replace(d);

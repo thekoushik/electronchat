@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import './Manage.css';
-import Emojify,{emojify} from 'react-emojione';
-import emojis from '../utils/emoji_icons';
+import {emojify} from 'react-emojione';
+import EmojiPanel from './EmojiPanel';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const options = {
     convertShortnames: true,
-    //convertUnicode: true,
-    //convertAscii: true,
     style: {
         backgroundImage: '',// 'url("images/emojione.sprites.png")',
         height: 24,
@@ -28,8 +26,6 @@ class Manage extends Component {
         this.state.chats.push({
             text: ""
         });
-        this.render_emoji_panel.bind(this);
-        this.render_emoji_li.bind(this);
     }
     navigate(route) {
         this.props.navigate(route);
@@ -83,52 +79,11 @@ class Manage extends Component {
             this.addChat(newchat, true);
         }
     }
-    render_emoji_li(i){
-        var self=this;
-        return i.map((emo,index)=>{
-            return (
-                <Emojify key={index}
-                         style={{margin:"2px", height: 24, width: 24,backgroundImage:''}}
-                         onClick={(e)=>{
-                            this.setState({ chat_txt: self.state.chat_txt+emo });
-                         }}>
-                    <span className="emoji">{emo}</span>
-                </Emojify>
-            );
-        });
-    }
-    //ref={(div) => {self.emojiList[index] = div;}}
-    render_emoji_panel(btn){
-        var self=this;
-        return emojis.map((image,index)=>{
-            if(btn)
-                return(
-                    <button key={index}
-                            className={"btn btn-large btn-default "+(self.state.emojipanelsel==index?"active":"")}
-                            style={{paddingBottom:"0px",paddingLeft:"5px",paddingRight:"5px"}}
-                            onClick={(e)=>{
-                                if(self.state.emojipanelsel!=index)
-                                    self.setState({emojipanelsel:index});
-                            }}>
-                        <Emojify style={{height: 24, width: 24,backgroundImage:''}}>
-                            <span className="emoji">{image[0]}</span>
-                        </Emojify>
-                    </button>
-                );
-            else
-                return(
-                    <div className={ self.state.emojipanelsel==index ? "" : "hidden_true" }
-                         key={index}>
-                        {this.render_emoji_li(image)}
-                    </div>
-                );
-        });
-    }
     render_chat_line() {
         var self = this;
         const count = this.state.chats.length - 1;
         return this.state.chats.map((txt, index) => {
-            if (index == count)
+            if (index === count)
                 return (
                     <li key={index} className="list-group-item" >
                         <div>
@@ -139,9 +94,9 @@ class Manage extends Component {
                 );
             else
                 return (
-                    <li key = { index } className = "list-group-item" >
-                        <div className = { "chat_lines " + (txt.sender_ip === self.state.user_info.ip ? "my_text" : "his_text") } >
-                            <strong className = "chat_text emoji" > { emojify(txt.text,options) } </strong>
+                    <li key={ index } className="list-group-item" >
+                        <div className={ "chat_lines " + (txt.sender_ip === self.state.user_info.ip ? "my_text" : "his_text") } >
+                            <strong className="chat_text emoji" > { emojify(txt.text,options) } </strong>
                             <p> { txt.time } </p>
                         </div>
                     </li>
@@ -169,19 +124,14 @@ class Manage extends Component {
                 </div>
                 <div className="chat_input">
                     <span className={"emoji_panel_drawer icon "+ (this.state.emojipanel?"icon-up-circled":"icon-down-circled") } onClick={(e)=>{this.setState({emojipanel:!this.state.emojipanel});}} ></span>
-                    <div className={"toolbar panel panel-default hidden_"+ this.state.emojipanel }>
-                        <div className="panel-heading">
-                            <div className="btn-group">
-                                {this.render_emoji_panel(true)}
-                            </div>
-                        </div>
-                        <div className="panel-body">
-                            {this.render_emoji_panel()}
-                        </div>
+                    <div className={"toolbar hidden_"+ this.state.emojipanel }>
+                        <EmojiPanel onEmojiClick={(emo)=>{
+                            this.setState({ chat_txt: self.state.chat_txt+emo });
+                        }} />
                     </div>
                     <input type="text"
-                        value={ this.state.chat_txt }
-                        onChange={(e) => { this.setState({ chat_txt: e.target.value }); }}
+                        value={this.state.chat_txt}
+                        onChange={(e) => { this.setState({chat_txt:e.target.value})}}
                         onKeyPress={ this.send_chat_text }
                         className="form-control pull-left"
                         placeholder="Enter Text.."/>
@@ -190,5 +140,4 @@ class Manage extends Component {
         );
     }
 }
-
 export default Manage;
